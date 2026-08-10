@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản | THE MAN</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><a href="web.html">THE MAN.</a></div>
+        <nav><ul>
+            <li><a href="web.html">Trang chủ</a></li>
+            <li><a href="search.html">Bộ sưu tập</a></li>
+            <li><a href="about.html">Về chúng tôi</a></li>
+            <li><a href="hotro.html">Hỗ trợ</a></li>
+        </ul></nav>
+        <div class="nav-icons">
+            <a href="search.html" class="nav-item-placeholder">🔍 Tìm kiếm</a>
+            <a href="cart.html" class="nav-item-placeholder">🛒 Giỏ hàng</a>
+        </div>
+    </header>
+    <main class="account-page">
+        <section id="auth-forms" class="account-card">
+            <div class="account-tabs"><a href="#login">Đăng nhập</a><a href="#register">Đăng ký</a></div>
+            <form id="login" class="account-form">
+                <h1>Đăng nhập</h1>
+                <label>Email<input id="login-email" type="email" required></label>
+                <label>Mật khẩu<input id="login-password" type="password" required></label>
+                <button type="submit" class="btn-submit">Đăng nhập</button>
+                <p id="login-message" class="account-message"></p>
+            </form>
+            <form id="register" class="account-form">
+                <h1>Tạo tài khoản</h1>
+                <label>Họ tên<input id="register-name" type="text" required></label>
+                <label>Email<input id="register-email" type="email" required></label>
+                <label>Mật khẩu<input id="register-password" type="password" required></label>
+                <button type="submit" class="btn-submit">Đăng ký</button>
+                <p id="register-message" class="account-message"></p>
+            </form>
+        </section>
+        <section id="account-dashboard" class="account-card" hidden>
+            <h1>Tài khoản của tôi</h1>
+            <div id="profile" class="account-section"><h2>Thông tin cá nhân</h2><p id="profile-info"></p></div>
+            <div id="favorites" class="account-section"><h2>Mục yêu thích</h2><p>Chưa có sản phẩm yêu thích.</p></div>
+            <button id="logout-button" type="button" class="reset-filters">Đăng xuất</button>
+        </section>
+    </main>
+    <script src="common-layout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
