@@ -65,3 +65,36 @@
         if (oldHeader) oldHeader.outerHTML = header;
     });
 })();
+
+$(document).ready(function() {
+    // Tạo sẵn mã HTML cho nút chọn ngôn ngữ
+    const langSwitcherHTML = `
+        <div class="language-switcher d-inline-block me-2 align-middle">
+            <select id="language-select" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                <option value="vi">VN</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
+    `;
+
+    // Tự động chèn vào khu vực chứa icon hoặc menu ở header của mọi trang
+    if ($('header .nav-icons').length > 0) {
+        $('header .nav-icons').prepend(langSwitcherHTML);
+    } else if ($('header').length > 0) {
+        $('header').append(langSwitcherHTML);
+    }
+
+    // Đọc trạng thái ngôn ngữ đã lưu trước đó (nếu có)
+    const savedLang = localStorage.getItem('site_language') || 'vi';
+    $('#language-select').val(savedLang);
+
+    // Lắng nghe sự kiện khi người dùng đổi ngôn ngữ
+    $(document).on('change', '#language-select', function() {
+        const selectedLang = $(this).val();
+        localStorage.setItem('site_language', selectedLang);
+        // Gọi hàm dịch trang của bạn ở đây (nếu có)
+        location.reload(); // Hoặc load lại trang để áp dụng ngôn ngữ mới
+    });
+});
+
+
