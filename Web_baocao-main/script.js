@@ -1313,3 +1313,50 @@ function formatPrice(number) {
 function scrollToTop() {
     $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
+
+// --- PHẦN ĐỔI NGÔN NGỮ (GOM CHUNG VÀO SCRIPT.JS) ---
+const translations = {
+  vi: {
+    home: "Trang chủ",
+    about: "Về chúng tôi",
+    support: "Hỗ trợ",
+    cart: "Giỏ hàng",
+    search: "Tìm kiếm",
+    footer_desc: "Thời trang nam tối giản, hiện đại và dễ phối đồ.",
+    store_address: "Địa chỉ cửa hàng: Trường Đại Học Cần Thơ"
+  },
+  en: {
+    home: "Home",
+    about: "About Us",
+    support: "Support",
+    cart: "Cart",
+    search: "Search",
+    footer_desc: "Minimalist, modern and easy-to-match men's fashion.",
+    store_address: "Store Address: Can Tho University"
+  }
+};
+
+function changeLanguage(lang) {
+  localStorage.setItem('selected_lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const key = element.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+      if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+        element.placeholder = translations[lang][key];
+      } else {
+        element.textContent = translations[lang][key];
+      }
+    }
+  });
+}
+
+// Tự động chạy khi mở bất kỳ trang nào
+document.addEventListener('DOMContentLoaded', () => {
+  const savedLang = localStorage.getItem('selected_lang') || 'vi';
+  const langSelector = document.getElementById('language-selector');
+  if (langSelector) {
+    langSelector.value = savedLang;
+  }
+  changeLanguage(savedLang);
+});
+
