@@ -1,8 +1,9 @@
 (function() {
-    const bootstrapCss = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
-    const iconsCss = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+    const bootstrapCss = 'lib/bootstrap/bootstrap.min.css';
+    const iconsCss = 'lib/fontawesome/css/all.min.css';
+    const interCss = 'lib/fonts/font.css';
 
-    [bootstrapCss, iconsCss].forEach(function(href) {
+    [bootstrapCss, iconsCss, interCss].forEach(function(href) {
         if (!document.querySelector(`link[href="${href}"]`)) {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
@@ -13,7 +14,7 @@
 
     if (!document.querySelector('script[src*="bootstrap.bundle"]')) {
         const bootstrapScript = document.createElement('script');
-        bootstrapScript.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
+        bootstrapScript.src = 'lib/bootstrap/bootstrap.bundle.min.js';
         document.body.appendChild(bootstrapScript);
     }
 
