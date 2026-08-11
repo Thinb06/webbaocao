@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng | THE MAN</title>
+    
+    <link href="lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/fonta">
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <!-- Nhúng CSS tùy biến bổ sung -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Khung chứa các thông báo Toast bên góc dưới bên trái -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ==========================================
+       1. THANH ĐIỀU HƯỚNG (HEADER NAVBAR BOOTSTRAP)
+       ========================================== -->
+    <header>
+        <script src="common-layout.js"></script>
+    </header> 
+
+    <!-- ==========================================
+       2. ĐƯỜNG DẪN LINK & TIÊU ĐỀ TRANG
+       ========================================== -->
+    <section class="bg-light py-4 border-bottom">
+        <div class="container px-md-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a href="web.html" class="text-dark text-decoration-none">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+                </ol>
+            </nav>
+            <h1 class="h3 text-uppercase fw-bold mb-0">Giỏ hàng của bạn</h1>
+        </div>
+    </section>
+
+    <!-- ==========================================
+       3. BỐ CỤC CHÍNH CỦA GIỎ HÀNG (2 CỘT BOOTSTRAP GRID)
+       ========================================== -->
+    <main class="container py-5">
+        <!-- Layout giỏ hàng chính (Sẽ ẩn bằng jQuery nếu giỏ hàng trống) -->
+        <div class="row g-4" id="cart-layout-wrapper">
+            
+            <!-- Cột Trái (8/12 phần): Danh sách sản phẩm -->
+            <div class="col-lg-8">
+                <div class="card border shadow-sm p-4">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr class="small text-uppercase fw-bold text-muted">
+                                    <th scope="col" style="width: 45%;">Sản phẩm</th>
+                                    <th scope="col" class="text-center" style="width: 15%;">Đơn giá</th>
+                                    <th scope="col" class="text-center" style="width: 20%;">Số lượng</th>
+                                    <th scope="col" class="text-end" style="width: 15%;">Thành tiền</th>
+                                    <th scope="col" class="text-center" style="width: 5%;"></th>
+                                </tr>
+                            </thead>
+                            <!-- Dữ liệu sản phẩm do jQuery render vào đây -->
+                            <tbody id="cart-items-list">
+                                <!-- Chỗ trống để chèn tr sản phẩm từ script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Nút quay lại trang chủ mua sắm -->
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="web.html" class="btn btn-sm btn-outline-dark">
+                            <i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cột Phải (4/12 phần): Nhập coupon & Tóm tắt thanh toán -->
+            <div class="col-lg-4">
+                <div class="card border shadow-sm p-4 sticky-top" style="top: 95px; z-index: 10;">
+                    <h3 class="h5 fw-bold pb-2 mb-4 border-bottom">TÓM TẮT ĐƠN HÀNG</h3>
+                    
+                    <!-- Ô nhập mã giảm giá -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted">Mã giảm giá (Coupon)</label>
+                        <div class="input-group">
+                            <input type="text" id="promo-code-input" class="form-control text-uppercase" placeholder="Nhập OWEN50 hoặc KM10">
+                            <button class="btn btn-dark btn-sm text-uppercase" type="button" onclick="applyPromoCode()">Áp dụng</button>
+                        </div>
+                        <!-- Thông báo áp mã thành công hay thất bại -->
+                        <div id="promo-message" class="small mt-2 fw-semibold"></div>
+                    </div>
+                    
+                    <!-- Chi tiết các dòng tiền -->
+                    <div class="d-flex justify-content-between mb-3 small">
+                        <span class="text-muted">Tạm tính:</span>
+                        <span id="summary-subtotal" class="fw-bold">0đ</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3 small" id="shipping-row">
+                        <span class="text-muted">Phí vận chuyển:</span>
+                        <span id="summary-shipping" class="fw-bold">30.000đ</span>
+                    </div>
+                    
+                    <!-- Dòng tiền giảm giá (chỉ hiện bằng jQuery nếu có mã coupon) -->
+                    <div class="d-flex justify-content-between mb-3 small text-success" id="summary-discount-row" style="display: none !important;">
+                        <span>Giảm giá:</span>
+                        <span id="summary-discount" class="fw-bold">-0đ</span>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold text-uppercase">Tổng cộng:</span>
+                        <span id="summary-grand-total" class="h4 fw-bold text-danger mb-0">0đ</span>
+                    </div>
+                    
+                    <!-- Nút mở Popup thanh toán (Trigger Modal Bootstrap) -->
+                    <button class="btn btn-owen w-100 py-3" onclick="openCheckoutModal()">Tiến hành thanh toán</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Giao diện hiển thị khi giỏ hàng hoàn toàn trống (Sẽ hiển thị bằng jQuery) -->
+        <div id="cart-empty-template" class="text-center py-5 border rounded bg-light" style="display: none;">
+            <i class="fas fa-shopping-bag fa-4x text-muted mb-3"></i>
+            <h3 class="fw-bold h5">Giỏ hàng của bạn đang trống</h3>
+            <p class="text-muted small mb-4">Hãy chọn mua các sản phẩm chất lượng nhất từ Owen.</p>
+            <a href="web.html" class="btn btn-owen">Mua sắm ngay</a>
+        </div>
+    </main>
+
+    <!-- ==========================================
+       4. POPUP THANH TOÁN (BOOTSTRAP MODAL COMPONENT)
+       ========================================== -->
+    <div class="modal fade" id="checkout-modal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3 border-0 shadow-lg">
+                <!-- Nút X tắt popup -->
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                
+                <!-- BƯỚC 1: Form điền thông tin khách hàng -->
+                <div id="checkout-form-step">
+                    <h2 class="modal-title h4 text-center fw-bold mb-4" id="checkoutModalLabel">Thông Tin Giao Hàng</h2>
+                    
+                    <form id="shipping-form" onsubmit="submitOrder(event)">
+                        <div class="row g-3">
+                            <!-- Input Họ tên -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted" for="ship-name">Họ và tên *</label>
+                                <input type="text" id="ship-name" class="form-control form-control-sm" required placeholder="Nguyễn Văn A">
+                            </div>
+                            <!-- Input Điện thoại -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted" for="ship-phone">Số điện thoại *</label>
+                                <input type="tel" id="ship-phone" class="form-control form-control-sm" required placeholder="0987654321" pattern="[0-9]{10}">
+                            </div>
+                            <!-- Input Email -->
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted" for="ship-email">Địa chỉ email *</label>
+                                <input type="email" id="ship-email" class="form-control form-control-sm" required placeholder="email@viethung.com">
+                            </div>
+                            <!-- Input Địa chỉ giao -->
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted" for="ship-address">Địa chỉ nhận hàng *</label>
+                                <input type="text" id="ship-address" class="form-control form-control-sm" required placeholder="Số nhà, Tên đường, Quận, TP...">
+                            </div>
+                            
+                            <!-- Lựa chọn phương thức thanh toán -->
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted">Phương thức thanh toán *</label>
+                                
+                                <!-- COD -->
+                                <div class="form-check border rounded p-3 mb-2" id="payment-cod-label" style="cursor:pointer; padding-left: 2.5em;">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="pay-cod" value="COD" checked onclick="togglePaymentHighlight('COD')">
+                                    <label class="form-check-label w-100" style="cursor:pointer;" for="pay-cod">
+                                        <span class="d-block fw-bold small text-dark">Thanh toán khi nhận hàng (COD)</span>
+                                        <span class="d-block text-muted" style="font-size: 11px;">Nhận hàng tại nhà rồi thanh toán tiền mặt.</span>
+                                    </label>
+                                </div>
+                                
+                                <!-- Chuyển khoản -->
+                                <div class="form-check border rounded p-3" id="payment-bank-label" style="cursor:pointer; padding-left: 2.5em;">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="pay-bank" value="BANK" onclick="togglePaymentHighlight('BANK')">
+                                    <label class="form-check-label w-100" style="cursor:pointer;" for="pay-bank">
+                                        <span class="d-block fw-bold small text-dark">Chuyển khoản ngân hàng</span>
+                                        <span class="d-block text-muted" style="font-size: 11px;">Chuyển tiền nhanh qua số tài khoản hoặc QR.</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Nút Xác nhận gửi đơn -->
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-owen w-100 py-2">Xác nhận đặt hàng</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- BƯỚC 2: Màn hình thông báo đặt hàng thành công (ẩn lúc đầu) -->
+                <div id="checkout-success-step" style="display: none;">
+                    <div class="text-center py-3">
+                        <div class="success-icon-box">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h3 class="fw-bold text-success h5 mb-2">ĐẶT HÀNG THÀNH CÔNG!</h3>
+                        <p class="text-muted small mb-4">Cảm ơn bạn đã đặt đồ tại THEMAN Studio. Đơn hàng của bạn đang được xử lý.</p>
+                        
+                        <!-- Chi tiết biên lai tóm tắt -->
+                        <div class="bg-light p-3 rounded text-start small border mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Mã đơn hàng:</strong>
+                                <span id="success-order-id" class="text-danger fw-bold">OWEN-9827</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Khách hàng:</strong>
+                                <span id="success-customer-name">Nguyễn Văn A</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Số điện thoại:</strong>
+                                <span id="success-customer-phone">0987654321</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Địa chỉ giao:</strong>
+                                <span id="success-customer-addr" class="text-end text-truncate" style="max-width: 200px;">86 Nguyễn Trãi, HN</span>
+                            </div>
+                            <hr class="my-2 border-secondary">
+                            <div class="d-flex justify-content-between fw-bold text-dark">
+                                <span>Tổng thanh toán:</span>
+                                <span id="success-order-total" class="text-danger">0đ</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Nút hoàn tất chuyển hướng -->
+                        <button type="button" class="btn btn-owen-navy py-2 px-4 small" onclick="closeSuccessAndRedirect()">Quay lại mua sắm</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-float-group">
+        <button class="float-bubble scroll-top" id="scroll-top-btn" onclick="scrollToTop()" aria-label="Lên đầu">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+    <footer class="site-footer">
+    <div class="footer-container">
+        <!-- Cột 1 -->
+        <div class="footer-column footer-brand">
+            <h2>THE MAN.</h2>
+            <p>
+                Thời trang nam tối giản, hiện đại và dễ phối đồ.
+            </p>
+        </div>
+        <!-- Cột 2 -->
+        <div class="footer-column">
+            <h3>LIÊN KẾT NHANH</h3>
+            <ul>
+                <li>
+                    <a href="about.html">Về chúng tôi</a>
+                </li>
+                <li>
+                    <a href="hotro.html">Hỗ trợ</a>
+                </li>
+                <li>
+                    <a href="search.html">Sản phẩm</a>
+                </li>
+            </ul>
+        </div>
+        <!-- Cột 3 -->
+        <div class="footer-column">
+            <h3>LIÊN HỆ</h3>
+            <ul>
+                <li>Hotline: 0949949355</li>
+                <li>Email: theman@gmail.com</li>
+                <li>Thời gian: 24/7</li>
+            </ul>
+        </div>
+        <!-- Cột 4 -->
+        <div class="footer-column">
+            <h3>ĐỊA CHỈ</h3>
+            <ul>
+                <li>Địa chỉ cửa hàng: Trường Đại Học Cần Thơ</li>
+                <li>Chi nhánh: Trường Đại Học Cần Thơ </li>
+                <li>Thông tin khác: Trường Đại Học Cần Thơ</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Dòng dưới -->
+    <div class="footer-bottom">
+        <p>
+            © 2026 THE MAN. STUDIO.
+        </p>
+        <span>Xin cảm ơn</span>
+    </div>
+</footer>
+    <script src="lib/jquery/jquery-3.6.4.min.js"></script>
+    <script src="lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
