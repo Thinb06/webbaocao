@@ -5,285 +5,125 @@
     <!-- Font Inter -->  
     <link href="lib/fonts/font.css" rel="stylesheet">  
     <link rel="stylesheet" href="lib/fontawesome/css/all.min.css">
-    <link rel="icon" href="hinhanh/logo.png" type="image/png">
+    <link rel="icon" href="images/logo.png" type="image/png">
     <link rel="stylesheet" href="style.css">
     </head> 
     <body> 
         <header> 
-        <div class="logo"> 
-        <a href="web.html">THE MAN.</a>
-        </div>  
-        <nav>  
-            <ul>  
-                <li>  
-                    <a href="about.html">Về chúng tôi</a>  
-                </li> 
-                
-                <li>
-                    <a href="hotro.html">Hỗ trợ</a>
-                </li>
-
-            </ul>  
-        </nav>  
-
-
-    <div class="nav-icons">  
-        <a href="/search.html" class="icon-btn search-btn" title="Tìm kiếm">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </a>
-        <!-- Icon Giỏ hàng (Có kèm số lượng sản phẩm) -->
-        <a href="/cart.html" class="icon-btn cart-btn" title="Giỏ hàng">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span class="cart-badge" id="cart-count">0</span> <!-- Số lượng đồ trong giỏ -->
-        </a>
-        <div class="account-menu">
-            <a href="taikhoan.html" class="icon-btn" title="Tài khoản">👤</a>
-            <div class="account-dropdown">
-                <a href="taikhoan.html#register">Đăng ký</a>
-                <a href="taikhoan.html#login">Đăng nhập</a>
-                <a href="taikhoan.html#profile">Thông tin cá nhân</a>
-                <a href="taikhoan.html#favorites">Mục yêu thích</a>
-            </div>
-        </div>
-    </div>
-
-    </header> <!-- BANNER --> <section class="hero-section"> <div class="hero-container">  
-
+        <script src="common-layout.js"></script>
+    </header>  <!-- BANNER --> <section class="hero-section"> <div class="hero-container">  
         <div class="hero-border-box">  
-
-            <h1>  
-                THE ESSENTIALS  
-            </h1>  
-
-
-            <p>  
-                Khung vị trí dành cho thông điệp chiến dịch  
-                hoặc bộ sưu tập mới.  
-            </p>  
-
-
-            <a href="#products" class="main-btn">  
-                Khám phá ngay  
-            </a>  
-
-
+            <img src="images/banner.jpg" alt="Banner 1" class="hero-slide is-active">
+            <img src="images/banner-thoi-trang-nam.jpg" alt="Banner 2" class="hero-slide">
+            <img src="images/banner-thoi-trang-nam-dep.jpg" alt="Banner 3" class="hero-slide">
         </div>  
-
     </div>
-
     </section> <!-- SẢN PHẨM --> <main id="products" class="main-content"> <div class="section-header">  
-
         <h2>  
             Danh Mục Nổi Bật
             <span class="product-count">4 danh mục sản phẩm</span>
         </h2>  
-
-
     </div>  
-
-
-
     <div class="empty-product-grid">  
-
-
-
         <!-- SẢN PHẨM 1 -->  
-
         <div class="product-box-skeleton">
             <a href="search.html?loai=polo">
             <div class="image-area-placeholder"> 
-
-
         <img src="images/aomau1.webp" alt="Áo thun nam" class="product-img">
-
-
             </div>  
             </a>
-
-
             <h3>  
                 Áo Polo / T-shirt
             </h3>  
-
-
-
-
-
-
         </div>  
-
-
-
-
-
         <!-- SẢN PHẨM 2 -->  
-
         <div class="product-box-skeleton">  
             <a href="search.html?loai=quantay">
-
-
             <div class="image-area-placeholder">
                 <img src="images/QuanTay.jpg" alt="Quần Tây" class="product-img">
-    
-
-
             </div>  
             </a>
-
-
             <h3>  
                 Quần Tây Kaki
             </h3>  
-
-
-
-
-
         </div>  
-
-
-
-
-
-
         <!-- SẢN PHẨM 3 -->  
-
         <div class="product-box-skeleton">  
             <a href="search.html?loai=phukien">
-
-
             <div class="image-area-placeholder">  
                 <img src="images/Old-Money-style-accessories-696x696.jpg" Alt="Phu kien" class="product-img">
-    
-
             </div>  
             </a>
-
-
             <h3>  
                 Phụ Kiện 
             </h3>  
-
-
-
-
-
         </div>  
-
-
-
-
-
         <!-- SẢN PHẨM 4 -->  
-
         <div class="product-box-skeleton">  
             <a href="search.html?loai=somi">
-
-
             <div class="image-area-placeholder">  
-
                 <img src="images/images.jfif" alt="Ao So mi" class="product-img">
-
             </div>  
             </a>
-
-
             <h3>  
                 Áo Sơ mi 
             </h3>  
-
-
-
-
         </div>  
-
-
-
     </div>
-
     </main>
     <footer class="site-footer">
-
     <div class="footer-container">
-
         <!-- Cột 1 -->
         <div class="footer-column footer-brand">
-
             <h2>THE MAN.</h2>
-
             <p>
                 Thời trang nam tối giản,
                 hiện đại và dễ phối đồ.
             </p>
-
         </div>
-
-
         <!-- Cột 2 -->
         <div class="footer-column">
-
             <h3>LIÊN KẾT NHANH</h3>
-
             <ul>
                 <li>
                     <a href="about.html">Về chúng tôi</a>
                 </li>
-
                 <li>
                     <a href="hotro.html">Hỗ trợ</a>
                 </li>
-
                 <li>
                     <a href="search.html">Sản phẩm</a>
                 </li>
             </ul>
-
         </div>
-
-
         <!-- Cột 3 -->
         <div class="footer-column">
-
             <h3>LIÊN HỆ</h3>
-
             <ul>
                 <li>Hotline: 0949949355</li>
                 <li>Email: theman@gmail.com</li>
                 <li>Thời gian: 24/7</li>
             </ul>
-
         </div>
-
-
         <!-- Cột 4 -->
         <div class="footer-column">
-
             <h3>ĐỊA CHỈ</h3>
-
             <ul>
                 <li>Địa chỉ cửa hàng: Trường Đại Học Cần Thơ</li>
                 <li>Chi nhánh: Trường Đại Học Cần Thơ </li>
                 <li>Thông tin khác: Trường Đại Học Cần Thơ</li>
             </ul>
-
         </div>
-
     </div>
-
-
     <!-- Dòng dưới -->
     <div class="footer-bottom">
-
         <p>
             © 2026 THE MAN. STUDIO.
         </p>
-
         <span>Xin cảm ơn</span>
-
     </div>
-
 </footer>
-    <script src="common-layout.js"></script>
     <script src="lib/jquery/jquery-3.6.4.min.js"></script>
     <script src="script.js"></script>
-    </body> </html>
+    </body> 
+</html>

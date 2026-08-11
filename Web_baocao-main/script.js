@@ -498,6 +498,9 @@ const PRODUCTS = [
 // ==========================================
 // Đọc danh sách giỏ hàng đã lưu trong LocalStorage, nếu không có thì gán mảng rỗng []
 let cart = JSON.parse(localStorage.getItem('owen_cart_simplified')) || [];
+let favorites = JSON.parse(localStorage.getItem('the_man_favorites') || '[]')
+    .map(Number)
+    .filter(Number.isFinite);
 let activeCoupon = null; // Lưu coupon hiện tại đang dùng
 
 // ==========================================
@@ -543,6 +546,24 @@ $(document).ready(function() {
             $('#scroll-top-btn').fadeOut();
         }
     });
+
+
+
+});
+
+function localized(value) {
+    return typeof window.translate === 'function' ? window.translate(value) : value;
+}
+
+window.addEventListener('languagechange', function() {
+    if ($('#homepage-products-grid').length > 0) renderProducts(PRODUCTS);
+    if ($('#product-catalog').length > 0) applyProductFilters();
+    if ($('#auth-forms').length > 0 && !$('#account-dashboard').prop('hidden')) {
+        const account = JSON.parse(localStorage.getItem('the_man_account') || 'null');
+        if (account) showAccountDashboard(account);
+    }
+    if ($('#cart-items-list').length > 0) renderCart();
+    if (typeof window.applyLanguage === 'function') window.applyLanguage();
 });
 
 // ==========================================
@@ -608,10 +629,18 @@ function renderProducts(productsList) {
                      data-selected-size="${defaultSize}">
                     
                     ${badgeHTML}
-                    
+                     
                     <!-- Khung ảnh hover -->
                     <div class="product-img-wrapper">
                         <img src="${product.image}" alt="${product.name}" class="product-img w-100 h-100 object-fit-cover">
+                        <button type="button"
+                                class="favorite-btn ${isFavorite(product.id) ? 'is-favorite' : ''}"
+                                data-product-id="${product.id}"
+                                aria-label="${isFavorite(product.id) ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích'}"
+                                aria-pressed="${isFavorite(product.id)}"
+                                title="${isFavorite(product.id) ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích'}">
+                            <i class="${isFavorite(product.id) ? 'fas' : 'far'} fa-heart"></i>
+                        </button>
                     </div>
                     
                     <!-- Thân thẻ thông tin -->
@@ -638,13 +667,13 @@ function renderProducts(productsList) {
                         <!-- Biến thể màu sắc & size -->
                         <div class="border-top pt-2">
                             <div class="mb-2">
-                                <span class="d-block small text-muted mb-1">Màu:</span>
+                                <span class="d-block small text-muted mb-1">${localized('Màu:')}</span>
                                 <div class="color-options-row">
                                     ${colorsHTML}
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <span class="d-block small text-muted mb-1">Size:</span>
+                                <span class="d-block small text-muted mb-1">${localized('Size:')}</span>
                                 <div class="size-options-row">
                                     ${sizesHTML}
                                 </div>
@@ -655,12 +684,12 @@ function renderProducts(productsList) {
                         <div class="row g-2">
                             <div class="col-6">
                                 <button class="btn btn-outline-dark btn-sm w-100 py-2 small fw-semibold" onclick="handleAddToCart(${product.id})">
-                                    <i class="fas fa-cart-plus me-1"></i> Thêm giỏ
+                                    <i class="fas fa-cart-plus me-1"></i> ${localized('Thêm giỏ')}
                                 </button>
                             </div>
                             <div class="col-6">
                                 <button class="btn btn-dark btn-sm w-100 py-2 small fw-semibold" onclick="handleBuyNow(${product.id})">
-                                    Mua ngay
+                                    ${localized('Mua ngay')}
                                 </button>
                             </div>
                         </div>
@@ -677,6 +706,28 @@ function renderProducts(productsList) {
 // 5. THIẾT LẬP SỰ KIỆN CLICK CHỌN BIẾN THỂ (JQUERY)
 // ==========================================
 function setupHomepageEvents() {
+    $('#homepage-products-grid').on('click', '.favorite-btn', function() {
+        const $button = $(this);
+        const productId = Number($button.attr('data-product-id'));
+        const favoriteIndex = favorites.indexOf(productId);
+        const favorite = favoriteIndex === -1;
+
+        if (favorite) {
+            favorites.push(productId);
+        } else {
+            favorites.splice(favoriteIndex, 1);
+        }
+        localStorage.setItem('the_man_favorites', JSON.stringify(favorites));
+
+        $button.toggleClass('is-favorite', favorite)
+            .attr('aria-pressed', String(favorite))
+            .attr('aria-label', favorite ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích')
+            .attr('title', favorite ? 'Bỏ khỏi yêu thích' : 'Thêm vào yêu thích')
+            .find('i')
+            .toggleClass('fas', favorite)
+            .toggleClass('far', !favorite);
+    });
+
     // Sự kiện click chọn màu sắc
     // Dùng jQuery delegation để lắng nghe click trên .color-dot
     $('#homepage-products-grid').on('click', '.color-dot', function() {
@@ -781,7 +832,7 @@ function applyProductFilters() {
     });
 
     renderProducts(filtered);
-    $('#catalog-result-count').text(`${filtered.length} sản phẩm`);
+    $('#catalog-result-count').text(`${filtered.length} ${localized('Sản phẩm').toLowerCase()}`);
 }
 
 function setupProductSearch() {
@@ -841,8 +892,51 @@ function setupAccountPage() {
 
 function showAccountDashboard(account) {
     $('#profile-info').text(`${account.name} - ${account.email}`);
+    renderFavorites();
     $('#auth-forms').prop('hidden', true);
     $('#account-dashboard').prop('hidden', false);
+}
+
+function isFavorite(productId) {
+    return favorites.indexOf(Number(productId)) !== -1;
+}
+
+function renderFavorites() {
+    const $favorites = $('#favorites');
+    const favoriteProducts = favorites
+        .map(productId => PRODUCTS.find(product => product.id === productId))
+        .filter(Boolean);
+
+    if (favoriteProducts.length === 0) {
+        $favorites.html('<h2>Mục yêu thích</h2><p class="favorites-empty">Chưa có sản phẩm yêu thích.</p>');
+        return;
+    }
+
+    $favorites.html(`
+        <h2>Mục yêu thích</h2>
+        <div class="favorites-list">
+            ${favoriteProducts.map(product => `
+                <article class="favorite-item">
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="favorite-item-info">
+                        <h3>${product.name}</h3>
+                        <p>${formatPrice(product.price)}</p>
+                    </div>
+                    <a href="search.html?loai=${product.category}" class="favorite-view-link">Xem sản phẩm</a>
+                    <button type="button" class="favorite-remove" data-product-id="${product.id}" aria-label="Bỏ ${product.name} khỏi yêu thích">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </article>
+            `).join('')}
+        </div>
+    `);
+
+    $favorites.off('click', '.favorite-remove').on('click', '.favorite-remove', function() {
+        const productId = Number($(this).attr('data-product-id'));
+        favorites = favorites.filter(id => id !== productId);
+        localStorage.setItem('the_man_favorites', JSON.stringify(favorites));
+        renderFavorites();
+    });
 }
 
 // ==========================================
@@ -896,16 +990,16 @@ function updateCartBadge() {
     // Tính tổng số lượng hàng trong giỏ
     let totalQty = 0;
     $.each(cart, function(idx, item) {
-        totalQty += item.quantity;
+        totalQty += Number(item.quantity) || 0;
     });
     
-    const $badge = $('#cart-count-badge');
-    $badge.text(totalQty);
+    const $badges = $('#cart-count-badge, #cart-count-badge-mobile');
+    $badges.text(totalQty);
     
     // Hiệu ứng nảy nhẹ khi thay đổi
-    $badge.addClass('animate__animated animate__bounceIn');
+    $badges.addClass('animate__animated animate__bounceIn');
     setTimeout(() => {
-        $badge.removeClass('animate__animated animate__bounceIn');
+        $badges.removeClass('animate__animated animate__bounceIn');
     }, 500);
 }
 
@@ -1017,7 +1111,7 @@ function renderCart() {
                         <img src="${item.image}" alt="${item.name}" class="rounded" style="width: 65px; height: 85px; object-fit: cover;">
                         <div>
                             <h6 class="mb-1 fw-bold text-dark small" style="line-height: 1.3;">${item.name}</h6>
-                            <span class="text-muted d-block" style="font-size: 11px;">Màu: ${item.color} | Size: ${item.size}</span>
+                            <span class="text-muted d-block" style="font-size: 11px;">${localized('Màu:')} ${item.color} | ${localized('Size:')} ${item.size}</span>
                         </div>
                     </div>
                 </td>
@@ -1278,11 +1372,11 @@ function handleNewsletterSubmit(event) {
 // Lấy tên tiếng Việt của danh mục sản phẩm
 function getCategoryLabel(category) {
     switch (category) {
-        case 'so-mi': return 'Sơ mi công sở';
-        case 'polo': return 'Áo Polo / T-Shirt';
-        case 'quan': return 'Quần tây & Quần kaki';
-        case 'phu-kien': return 'Phụ kiện da';
-        default: return 'Khác';
+        case 'so-mi': return localized('Sơ mi công sở');
+        case 'polo': return localized('Áo Polo / T-Shirt');
+        case 'quan': return localized('Quần tây & Quần kaki');
+        case 'phu-kien': return localized('Phụ kiện da');
+        default: return localized('Khác');
     }
 }
 

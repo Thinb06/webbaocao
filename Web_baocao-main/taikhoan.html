@@ -5,20 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tài khoản | THE MAN</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="images/logo.png" type="image/png">
 </head>
 <body>
     <header>
-        <div class="logo"><a href="web.html">THE MAN.</a></div>
-        <nav><ul>
-            <li><a href="web.html">Trang chủ</a></li>
-            <li><a href="about.html">Về chúng tôi</a></li>
-            <li><a href="hotro.html">Hỗ trợ</a></li>
-        </ul></nav>
-        <div class="nav-icons">
-            <a href="search.html" class="nav-item-placeholder">🔍 Tìm kiếm</a>
-            <a href="cart.html" class="nav-item-placeholder">🛒 Giỏ hàng</a>
-        </div>
-    </header>
+        <script src="common-layout.js"></script>
+    </header> 
     <main class="account-page">
         <section id="auth-forms" class="account-card">
             <div class="account-tabs"><a href="#login">Đăng nhập</a><a href="#register">Đăng ký</a></div>
@@ -41,92 +33,62 @@
         <section id="account-dashboard" class="account-card" hidden>
             <h1>Tài khoản của tôi</h1>
             <div id="profile" class="account-section"><h2>Thông tin cá nhân</h2><p id="profile-info"></p></div>
-            <div id="favorites" class="account-section"><h2>Mục yêu thích</h2><p>Chưa có sản phẩm yêu thích.</p></div>
+            <div id="favorites" class="account-section"><h2>Mục yêu thích</h2><p class="favorites-empty">Chưa có sản phẩm yêu thích.</p></div>
             <button id="logout-button" type="button" class="reset-filters">Đăng xuất</button>
         </section>
     </main>
     <footer class="site-footer">
-
     <div class="footer-container">
-
         <!-- Cột 1 -->
         <div class="footer-column footer-brand">
-
             <h2>THE MAN.</h2>
-
             <p>
                 Thời trang nam tối giản,
                 hiện đại và dễ phối đồ.
             </p>
-
         </div>
-
-
         <!-- Cột 2 -->
         <div class="footer-column">
-
             <h3>LIÊN KẾT NHANH</h3>
-
             <ul>
                 <li>
                     <a href="about.html">Về chúng tôi</a>
                 </li>
-
                 <li>
                     <a href="hotro.html">Hỗ trợ</a>
                 </li>
-
                 <li>
                     <a href="search.html">Sản phẩm</a>
                 </li>
             </ul>
-
         </div>
-
-
         <!-- Cột 3 -->
         <div class="footer-column">
-
             <h3>LIÊN HỆ</h3>
-
             <ul>
                 <li>Hotline: 0949949355</li>
                 <li>Email: theman@gmail.com</li>
                 <li>Thời gian: 24/7</li>
             </ul>
-
         </div>
-
-
         <!-- Cột 4 -->
         <div class="footer-column">
-
             <h3>ĐỊA CHỈ</h3>
-
             <ul>
                 <li>Địa chỉ cửa hàng: Trường Đại Học Cần Thơ</li>
                 <li>Chi nhánh: Trường Đại Học Cần Thơ </li>
                 <li>Thông tin khác: Trường Đại Học Cần Thơ</li>
             </ul>
-
         </div>
-
     </div>
-
-
     <!-- Dòng dưới -->
     <div class="footer-bottom">
-
         <p>
             © 2026 THE MAN. STUDIO.
         </p>
-
         <span>Xin cảm ơn</span>
-
     </div>
-
 </footer>
-    <script src="common-layout.js"></script>
     <script src="lib/jquery/jquery-3.6.4.min.js"></script>
     <script src="script.js"></script>
 </body>
