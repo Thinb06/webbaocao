@@ -1845,3 +1845,20 @@ nav ul{
         font-size: 13px;
     }
 }
+
+#language-selector {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+#language-selector:focus {
+  outline: none;
+  border-color: #333;
+}
+
+
